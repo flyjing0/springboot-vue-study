@@ -3,10 +3,15 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/vue?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
-    username: root
-    password: root
+    url: jdbc:mysql://120.48.75.107:3306/ergou?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: aragon
+    password: 123456
 
 #mybatis:
 #  mapper-locations: classpath:mybatis/mapper/*.xml
+logging:
+  level:
+    root: info
+    com:
+      wen: debug
 #  type-aliases-package: com/wen/pojo

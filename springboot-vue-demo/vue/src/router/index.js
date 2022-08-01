@@ -28,6 +28,11 @@ const routes = [
         name: 'News',
         component: ()=>import("@/views/News")
       },
+      {
+        path: '/project',
+        name: 'Project',
+        component: ()=>import("@/views/Project")
+      }
     ]
   },
   {

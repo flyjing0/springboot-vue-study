@@ -37,7 +37,7 @@ public class FileController {
 //        定义文件的唯一标识（前缀）
         String flag = IdUtil.fastSimpleUUID();
 
-        String rootFilePath = System.getProperty("user.dir")+"/springboot/src/main/resources/files/"+flag+"_"+originalFilename;//获取文件上传的路径
+        String rootFilePath = System.getProperty("user.dir")+"\\springboot-vue-demo\\springboot\\src\\main\\resources\\files\\"+flag+"_"+originalFilename;//获取文件上传的路径
         try {
             FileUtil.writeBytes(file.getBytes(),rootFilePath);//把文件写入该路径
         } catch (IOException e) {
@@ -55,7 +55,7 @@ public class FileController {
     @GetMapping("/{flag}")
     public void getFiles(@PathVariable String flag, HttpServletResponse response){
         OutputStream os;//新建一个输出对象
-        String basePath = System.getProperty("user.dir")+"/springboot/src/main/resources/files/";//文件路径
+        String basePath = System.getProperty("user.dir")+"\\springboot-vue-demo\\springboot\\src\\main\\resources\\files\\";//文件路径
         List<String> fileNames = FileUtil.listFileNames((basePath));//获取所有的文件名称
         String fileName = fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");//找到根参数一致的文件
 
@@ -85,7 +85,7 @@ public class FileController {
 //        定义文件的唯一标识（前缀）
         String flag = IdUtil.fastSimpleUUID();
 
-        String rootFilePath = System.getProperty("user.dir")+"/springboot/src/main/resources/files/"+flag+"_"+originalFilename;//获取文件上传的路径
+        String rootFilePath = System.getProperty("user.dir")+"\\springboot-vue-demo\\springboot\\src\\main\\resources\\files\\"+flag+"_"+originalFilename;//获取文件上传的路径
         try {
             FileUtil.writeBytes(file.getBytes(),rootFilePath);//把文件写入该路径
         } catch (IOException e) {
