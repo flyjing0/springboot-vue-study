@@ -3,3 +3,10 @@
     padding: 0;
     box-sizing: border-box;
 }
+:root {
+    --van-tree-select-nav-background-color:var(--van-primary-color);
+}
+/deep/ .van-cell__width {
+    background-color: #000;
+
+}

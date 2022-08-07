@@ -2,7 +2,7 @@
   <el-menu
       style="width: 200px;min-height: calc(100vh - 50px);background:linear-gradient(0deg,#1deca4,#61b9dc)"
       :uniqueOpened="true"
-      default-active="/news"
+      default-active="/projects"
       class="el-menu-vertical-demo"
       router
       background-color="inherit"
@@ -14,7 +14,8 @@
     </el-submenu>
     <el-menu-item index="/book">书籍管理</el-menu-item>
     <el-menu-item index="/news">新闻管理</el-menu-item>
-    <el-menu-item index="/project">项目管理</el-menu-item>
+    <el-menu-item index="/projects">项目管理</el-menu-item>
+    <el-menu-item index="/items">细目管理</el-menu-item>
   </el-menu>
 </template>
 
@@ -40,7 +41,7 @@ export default {
   },
   methods:{
 
-  }
+  },
 }
 </script>
 

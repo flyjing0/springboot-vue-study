@@ -16,5 +16,6 @@ public class Project {
     private Integer id;
     private String projectId;
     private String projectName;
+    private String validFlag;
 
 }

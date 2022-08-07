@@ -2,7 +2,7 @@ import axios from 'axios'
 import router from "@/router";
 
 const request = axios.create({
-    //baseUrl:'/api'
+    //baseUrl:'/api',
     timeout: 5000
 })
 
@@ -11,7 +11,9 @@ const request = axios.create({
 // 比如统一加token，对请求参数统一加密
 request.interceptors.request.use(config => {
     config.headers['Content-Type'] = 'application/json;charset=utf-8';
-
+    if(config.url.includes('dictionary')){
+        return config
+    }
     // config.headers['token'] = user.token;  // 设置请求头
     //取出sessionStorage里面的用户信息
     let userJson = sessionStorage.getItem("user");

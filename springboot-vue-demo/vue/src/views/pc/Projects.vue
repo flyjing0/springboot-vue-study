@@ -2,64 +2,41 @@
   <div style="padding-left:10px; padding-right: 10px; width: calc(100vw - 200px)">
     <!--    功能趋于-->
     <div style="margin: 10px 0">
-      <el-button type="warning" plain @click="add" v-if="user.role===1">新增</el-button>
-      <el-button type="primary" plain  v-if="user.role===1">导入</el-button>
-      <el-button type="primary" plain  v-if="user.role===1">导出</el-button>
+      <el-button type="warning" plain @click="add">新增</el-button>
+      <el-button type="primary" plain>导入</el-button>
+      <el-button type="primary" plain>导出</el-button>
     </div>
     <!--    搜索区域-->
     <div style="margin: 10px 0">
-      <el-input v-model="search" placeholder="请输入关键字" style="width: 20%" clearable></el-input>
+      <el-input v-model="search" placeholder="请输入关键字" style="width: 20%" clearable @clear="load"></el-input>
       <el-button style="margin-left: 5px; background-color: #5defc1; color: white" @click="load" plain>查询</el-button>
     </div>
     <el-table
-        :data="tableData"
-        border
-        stripe
-        style="width: 100%">
+            :data="tableData"
+            border
+            stripe
+            style="width: 100%">
       <el-table-column
-          prop="id"
-          label="ID"
-          sortable>
+              type=index
+              label="序号"
+              >
       </el-table-column>
       <el-table-column
-          prop="projectName"
-          label="项目名称">
+              prop="projectName"
+              label="项目名称">
       </el-table-column>
-      <!--
+
+
       <el-table-column
-          label="书籍封面">
-        <template #default="scope">
-          <div class="demo-image__preview">
-            <el-image
-                style="width: 100px; height: 100px"
-                :src="scope.row.cover"
-                :preview-src-list="[scope.row.cover]">
-            </el-image>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column
-          prop="price"
-          label="单价">
-      </el-table-column>
-      <el-table-column
-          prop="author"
-          label="作者">
-      </el-table-column>
-      <el-table-column
-          prop="createTime"
-          label="发布时间">
-      </el-table-column>
-      -->
-      <el-table-column
-          fixed="right"
-          label="操作"  v-if="user.role===1">
+              fixed="right"
+              label="操作">
 
         <template #default="scope">
           <div style="display: flex; align-content: space-between">
+            <el-button @click="details(scope.row)" type="primary">详情</el-button>
             <el-button @click="handleEdit(scope.row)" type="primary">编辑</el-button>
             <el-popconfirm
-                title="确定删除吗？" @confirm="handleDelete(scope.row.id)">
+                    title="确定删除吗？" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="danger">删除</el-button>
               </template>
@@ -74,39 +51,28 @@
 
     <div style="margin: 10px 0">
       <el-pagination
-          background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[5, 10, 20]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
+              background
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage4"
+              :page-sizes="[5, 10, 20]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="total">
       </el-pagination>
       <!--弹窗-->
       <el-dialog
-          title="提示"
-          v-model="dialogVisible"
-          width="30%">
+              title="项目名称"
+              v-model="dialogVisible"
+              width="50%">
         <el-form :model="form" label-width="120px">
-          <el-form-item label="书籍名称">
-            <el-input v-model="form.name"></el-input>
+          <el-form-item label="项目名称">
+            <el-input v-model="form.projectName" style="width: 50%"></el-input>
           </el-form-item>
-          <el-form-item label="价格">
-            <el-input v-model="form.price"></el-input>
-          </el-form-item>
-          <el-form-item label="作者">
-            <el-input v-model="form.author"></el-input>
-          </el-form-item>
-          <el-form-item label="发布时间">
-            <el-date-picker style="width: 100%;" value-format="YYYY-MM-DD" v-model="form.createTime" type="date" clearable></el-date-picker>
-          </el-form-item>
-          <el-form-item label="封面">
-            <el-upload ref="upload" action="http://localhost:9090/files/upload" :on-success="filesUploadSuccess">
-              <el-button type="primary">点击上传</el-button>
 
-            </el-upload>
-          </el-form-item>
+          <div id="div1">
+
+          </div>
         </el-form>
         <template #footer>
           <span class="dialog-footer">
@@ -114,6 +80,18 @@
             <el-button type="primary" @click="save">确 定</el-button>
           </span>
         </template>
+      </el-dialog>
+
+      <el-dialog
+              title="详情"
+              v-model="vis"
+              width="50%">
+
+        <el-card>
+          <div v-html="detail.content" style="min-height: 150px;">
+
+          </div>
+        </el-card>
       </el-dialog>
 
     </div>
@@ -124,9 +102,10 @@
 
 
 import request from "@/utils/request";
+import { ref } from 'vue';
 
 export default {
-  name: 'Project',
+  name: 'Projects',
   components: {
 
   },
@@ -134,6 +113,7 @@ export default {
     return {
       form: {},
       search:'',
+      projectId:'',
       currentPage4: 1,
       pageSize: 10,
       total:0,
@@ -156,15 +136,14 @@ export default {
   },
   methods:{
     load(){
-      request.get("/api/project",{
+      request.get("/api/projects",{
         params: {
           pageNum: this.currentPage4,
           pageSize: this.pageSize,
           search: this.search
         }
       }).then(res =>{
-        console.log(res);
-        this.tableData = res.data.records;
+        this.tableData =res.data.records;
         this.total = res.data.total;
       })
     },
@@ -179,7 +158,7 @@ export default {
     },
     save(){
       if (this.form.id){//更新
-        request.put("/api/project",this.form).then(res =>{
+        request.put("/api/projects",this.form).then(res =>{
           console.log(res);
           if (res.code==='0'){
             this.$message({
@@ -196,7 +175,7 @@ export default {
           this.dialogVisible = false;//关闭弹窗
         });
       }else {//新增
-        request.post("/api/project",this.form).then(res =>{
+        request.post("/api/projects",this.form).then(res =>{
           console.log(res);
           if (res.code==='0'){
             this.$message({
@@ -237,7 +216,7 @@ export default {
     // },
     handleDelete(id){
       console.log(id);
-      request.delete("/api/project/"+id).then(res => {
+      request.delete("/api/projects/"+id).then(res => {
         if (res.code==='0'){
           this.$message({
             type: "success",
@@ -257,8 +236,7 @@ export default {
       console.log(res);
       this.form.cover = res.data;
       this.load();
-    }
-
-  }
+    },
+  },
 }
 </script>
